@@ -15,7 +15,6 @@ import 'package:latlong2/latlong.dart';
 // =============================================================================
 
 class AulaMapasGeolocalizacaoViewModel extends ChangeNotifier {
-  /// Centro inicial do mapa (ex.: Brasil) até o usuário clicar em "Minha localização".
   static const LatLng centroInicialPadrao = LatLng(-23.5505, -46.6333);
 
   LatLng? _posicaoAtual;
@@ -33,9 +32,6 @@ class AulaMapasGeolocalizacaoViewModel extends ChangeNotifier {
   bool get rotaLoading => _rotaLoading;
   String? get rotaErro => _rotaErro;
 
-  /// Chamado quando o usuário toca em "Minha localização".
-  /// Deve obter a posição via Geolocator, atualizar _posicaoAtual (ou _mensagemErro)
-  /// e chamar notifyListeners().
   Future<void> obterMinhaLocalizacao() async {
     _loading = true;
     _mensagemErro = null;
@@ -79,9 +75,6 @@ class AulaMapasGeolocalizacaoViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Chamado quando o usuário define origem/destino e toca em "Rota até".
-  /// Deve chamar a API OSRM (GET com os dois pontos), parsear a resposta,
-  /// preencher _pontosRota com a lista de LatLng da geometria e chamar notifyListeners().
   Future<void> buscarRota(LatLng origem, LatLng destino) async {
     _rotaLoading = true;
     _rotaErro = null;

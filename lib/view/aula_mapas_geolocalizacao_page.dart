@@ -62,14 +62,6 @@ class _AulaMapasGeolocalizacaoPageState
       ),
       body: Stack(
         children: [
-          // -------------------------------------------------------------------
-          // MAPA — FlutterMap com tiles OpenStreetMap
-          // -------------------------------------------------------------------
-          // O initialCenter e initialZoom definem onde o mapa abre. Quando o
-          // usuário obtém a localização, vamos centralizar no ViewModel com
-          // _mapController.move(). O TileLayer usa os servidores públicos do
-          // OSM; no web funciona sem API key.
-          // -------------------------------------------------------------------
           FlutterMap(
             mapController: _mapController,
             options: MapOptions(
@@ -81,10 +73,6 @@ class _AulaMapasGeolocalizacaoPageState
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                 userAgentPackageName: 'com.example.mobile2_aulas',
               ),
-              // TODO: quando o ViewModel tiver posicaoAtual preenchida, exibir
-              // um marcador no mapa. Use MarkerLayer(markers: [ Marker(point: ...,
-              // child: Icon(Icons.location_on), width: 48, height: 48) ]).
-              // Só mostre a camada de marcadores se posicao != null.
               if (posicao != null)
                 MarkerLayer(
                   markers: [
@@ -100,9 +88,6 @@ class _AulaMapasGeolocalizacaoPageState
                     ),
                   ],
                 ),
-              // TODO: quando o ViewModel tiver pontosRota não vazio, desenhar a
-              // rota no mapa. Use PolylineLayer(polylines: [ Polyline(
-              //   points: viewModel.pontosRota, color: Colors.blue, strokeWidth: 4) ]).
               if (pontosRota.isNotEmpty)
                 PolylineLayer(
                   polylines: [
@@ -116,9 +101,6 @@ class _AulaMapasGeolocalizacaoPageState
             ],
           ),
 
-          // -------------------------------------------------------------------
-          // Rota até — dois pontos (origem = minha localização; destino = campos)
-          // -------------------------------------------------------------------
           Positioned(
             left: 16,
             top: 16,
@@ -186,10 +168,6 @@ class _AulaMapasGeolocalizacaoPageState
                         onPressed: rotaLoading
                             ? null
                             : () async {
-                                // TODO: ler origem (posicaoAtual ?? centroInicialPadrao) e destino
-                                // (parse _destinoLatController e _destinoLngController). Chamar
-                                // _viewModel.buscarRota(origem, destino). Opcional: centralizar
-                                // o mapa na rota (fitCamera ou move para o centro da rota).
                                 final lat = double.tryParse(_destinoLatController.text);
                                 final lng = double.tryParse(_destinoLngController.text);
                                 if (lat == null || lng == null) return;
@@ -216,12 +194,6 @@ class _AulaMapasGeolocalizacaoPageState
             ),
           ),
 
-          // -------------------------------------------------------------------
-          // Botão flutuante "Minha localização"
-          // -------------------------------------------------------------------
-          // Ao tocar, deve chamar o ViewModel para obter a posição e depois
-          // centralizar o mapa nela (MapController.move).
-          // -------------------------------------------------------------------
           Positioned(
             right: 16,
             bottom: 24,
@@ -232,9 +204,6 @@ class _AulaMapasGeolocalizacaoPageState
                   onPressed: loading
                       ? null
                       : () async {
-                          // TODO: 1) Chamar await _viewModel.obterMinhaLocalizacao()
-                          //       2) Se _viewModel.posicaoAtual != null, centralizar
-                          //          o mapa: _mapController.move(posicaoAtual!, 15);
                           await _viewModel.obterMinhaLocalizacao();
                           final p = _viewModel.posicaoAtual;
                           if (p != null) _mapController.move(p, 15);
@@ -249,7 +218,6 @@ class _AulaMapasGeolocalizacaoPageState
                   label: Text(loading ? 'Obtendo...' : 'Minha localização'),
                 ),
                 const SizedBox(height: 12),
-                // Card com coordenadas ou mensagem de erro (didático)
                 Card(
                   margin: EdgeInsets.zero,
                   child: Padding(
